@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Globals\Constants;
+use App\Http\Utils\Alert;
 use App\Http\Utils\DateUtil;
 use Illuminate\Http\Request;
 use App\Models\Document;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Validation\Validator;
 
 class DocumentListController extends Controller
 {
@@ -17,7 +18,9 @@ class DocumentListController extends Controller
      */
     public function index()
     {
-        return view('documents.index');
+        $documents = Document::orderBy('created_at', 'DESC')->get();
+        $documents->load('docStatus');
+        return view('documents.index', compact('documents'));
     }
 
     /**
@@ -45,7 +48,7 @@ class DocumentListController extends Controller
             'from' => 'required',
             'for' => 'required',
             'users' => 'required',
-            // 'file' => 'required|image|mimes:jpeg,png,jpg,svg'
+            'file' => 'required|image|mimes:jpeg,png,jpg,svg'
         ]);
 
         $documents = new Document;
@@ -58,11 +61,20 @@ class DocumentListController extends Controller
         $documents->from = $request->from;
         $documents->for = $request->for;
         $documents->users = $request->users;
-        // $documents->file = $request->file;
+
+        if ($request->hasFile('file')) {
+            $file = $request->file('file');
+            $imageName = 'DOC_' . time() . '_'  . $file->getClientOriginalName();
+            $imageName . $file->getExtension();
+            $documents->file = $imageName;
+            $file->storeAs('public/' . Constants::$DOC_PATH, $imageName);
+        }
+
         $documents->save();
         DB::commit();
 
-        return back();
+        $status = new Alert('success', 'สำเร็จ', 'เพิ่มเอกสารเรียบร้อยแล้ว');
+        return back()->with('status', $status);
     }
 
     /**
@@ -84,7 +96,9 @@ class DocumentListController extends Controller
      */
     public function edit($id)
     {
-        //
+        $document = Document::where('id', $id)->first();
+        $document->load('docStatus');
+        return view('documents.edit', compact('document'));
     }
 
     /**

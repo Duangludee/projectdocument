@@ -75,6 +75,15 @@
             <!-- Main content -->
             <section class="content pb-3">
             <div class="container-fluid">
+
+                @if (session('status'))
+                <div class="alert alert-{{session('status')->type}} alert-dismissible fade show">
+                    <button type="button" class="close" data-bs-dismiss="alert" aria-hidden="true">×</button>
+                    <h5><i class="icon fas fa-check"></i> {{session('status')->title}}</h5>
+                    {{session('status')->msg}}
+                </div>
+                @endif
+
                 <div id="app">
                     @yield('content')
                 </div>

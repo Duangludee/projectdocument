@@ -27,6 +27,9 @@
     {{-- Time picker --}}
     <link rel="stylesheet" type="text/css" href="{{asset('plugins/timepicker/jquery.timepicker.min.css')}}">
 
+    {{-- Select 2 --}}
+    <link rel="stylesheet" type="text/css" href="{{asset('plugins/select2/css/select2.min.css')}}">
+
     <!-- Styles -->
     {{-- <link href="{{ mix('css/app.css') }}" rel="stylesheet"> --}}
 
@@ -127,6 +130,9 @@
 
     {{-- Time picker --}}
     <script src="{{asset('plugins/timepicker/jquery.timepicker.min.js')}}"></script>
+
+    {{-- Select 2 --}}
+    <script src="{{asset('plugins/select2/js/select2.full.min.js')}}"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js"></script>
 

@@ -100,7 +100,12 @@
                 <div class="form-group row px-2">
                     <label for="users" class="col-sm-auto col-form-label ps-0">ผู้ดำเนินงาน</label>
                     <div class="col-sm-6 px-0">
-                        <input type="text" class="form-control @error('users') is-invalid @enderror" id="users" name="users" placeholder="ผู้ดำเนินงาน" value="{{ old('users') }}">
+                        <select class="form-control select-users @error('users') is-invalid @enderror" name="users[]" multiple="multiple">
+                            <option value="" disabled>กรุณาเลือกผู้รับผิดชอบ</option>
+                            @foreach ($users as $user)
+                            <option value="{{$user->id}}">{{$user->getFullName()}}</option>
+                            @endforeach
+                        </select>
 
                         @error('users')
                         <span class="invalid-feedback" role="alert">
@@ -150,16 +155,6 @@
                 todayBtn: true,
                 todayHighlight: true
             }).datepicker("setDate", "0");
-
-            $('#btnSubmit').on('click', function () {
-                showAlertWithCallBack('warning', 'คุณต้องการเพิ่มเอกสาร?').then(
-                    (ok) => {
-                        if (!ok) return;
-
-                        $('#docCreateForm').submit();
-                    }
-                );
-            });
             $('.timepicker-in').timepicker({
                 timeFormat: 'HH:mm',
                 interval: 1,
@@ -181,6 +176,17 @@
                 dynamic: false,
                 dropdown: true,
                 scrollbar: true
+            });
+            $('.select-users').select2();
+
+            $('#btnSubmit').on('click', function () {
+                showAlertWithCallBack('warning', 'คุณต้องการเพิ่มเอกสาร?').then(
+                    (ok) => {
+                        if (!ok) return;
+
+                        $('#docCreateForm').submit();
+                    }
+                );
             });
         });
     </script>

@@ -26,5 +26,5 @@ Route::prefix('document')->group(function () {
     Route::post('/store', [App\Http\Controllers\DocumentListController::class, 'store'])->name('document.store');
 
     Route::get('/{id}/edit', [App\Http\Controllers\DocumentListController::class, 'edit'])->name('document.edit');
-
+    Route::put('/{docId}/update', [App\Http\Controllers\DocumentListController::class, 'update'])->name('document.update');
 });

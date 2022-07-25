@@ -33,7 +33,16 @@
 
             <div>
                 <label for="for" class="form-label">ผู้ดำเนินการ</label>
-                <p class="text-secondary">{{$item->users}}</p>
+                @foreach ($item->handlers as $index => $handler)
+                <div class="d-flex align-items-center">
+                    <p class="text-secondary m-0">{{$index + 1}}. {{$handler->user->getFullName()}}</p>
+                    @if ($handler->status == 1)
+                    <i class="fas fa-check-circle p-1" style='color:#28a745'></i>
+                    @else
+                    <i class="fas fa-times-circle p-1" style='color:#dc3545'></i>
+                    @endif
+                </div>
+                @endforeach
             </div>
         </div>
         <div class="modal-footer">

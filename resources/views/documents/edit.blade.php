@@ -10,7 +10,10 @@
             </h5>
         </div>
         <div class="card-body">
-            <form action="{{route('document.store')}}" method="post" enctype="multipart/form-data" id="docCreateForm">
+            <form action="{{route('document.update', ['docId' => $document->id])}}" method="POST" enctype="multipart/form-data" id="docCreateForm">
+                @csrf
+                @method('PUT')
+
                 <div class="form-group row px-2">
                     <label for="no" class="col-sm-auto col-form-label ps-0">เลขที่</label>
                     <div class="col-sm-6 px-0">
@@ -100,7 +103,14 @@
                 <div class="form-group row px-2">
                     <label for="users" class="col-sm-auto col-form-label ps-0">ผู้ดำเนินงาน</label>
                     <div class="col-sm-6 px-0">
-                        <input type="text" class="form-control @error('users') is-invalid @enderror" id="users" name="users" placeholder="ผู้ดำเนินงาน" value="{{$document->users}}">
+                        <select class="form-control select-users @error('users') is-invalid @enderror" name="users[]" multiple="multiple">
+                            <option value="" disabled>กรุณาเลือกผู้รับผิดชอบ</option>
+                            @foreach ($users as $user)
+                                @foreach ($document->handlers as $handler)
+                                <option value="{{$user->id}}" {{$handler->user_id == $user->id ? 'selected' : ''}}>{{$user->getFullName()}}</option>
+                                @endforeach
+                            @endforeach
+                        </select>
 
                         @error('users')
                         <span class="invalid-feedback" role="alert">
@@ -110,10 +120,14 @@
                     </div>
                 </div>
 
+                <div class="my-3">
+                    <img class="img-thumbnail" src="{{url($document->getDocImage())}}" alt="DOC" width="500px">
+                </div>
+
                 <div class="form-group row px-2">
                     <label class="col-sm-auto col-form-label ps-0" for="formFile">แนบไฟล์</label>
                     <div class="col-sm-6 px-0">
-                        <input class="form-control @error('file') is-invalid @enderror" type="file" id="formFile" name="file" accept="image/*" value="{{$document->file}}">
+                        <input class="form-control @error('file') is-invalid @enderror" type="file" id="formFile" name="file" accept="image/*">
 
                         @error('file')
                         <span class="invalid-feedback" role="alert">
@@ -150,16 +164,6 @@
                 todayBtn: true,
                 todayHighlight: true
             }).datepicker("setDate", "0");
-
-            $('#btnSubmit').on('click', function () {
-                showAlertWithCallBack('warning', 'คุณต้องการเพิ่มเอกสาร?').then(
-                    (ok) => {
-                        if (!ok) return;
-
-                        $('#docCreateForm').submit();
-                    }
-                );
-            });
             $('.timepicker-in').timepicker({
                 timeFormat: 'HH:mm',
                 interval: 1,
@@ -179,6 +183,17 @@
                 dynamic: false,
                 dropdown: true,
                 scrollbar: true
+            });
+            $('.select-users').select2();
+
+            $('#btnSubmit').on('click', function () {
+                showAlertWithCallBack('warning', 'คุณต้องการเพิ่มเอกสาร?').then(
+                    (ok) => {
+                        if (!ok) return;
+
+                        $('#docCreateForm').submit();
+                    }
+                );
             });
         });
     </script>

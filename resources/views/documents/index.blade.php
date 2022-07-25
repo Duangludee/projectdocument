@@ -14,7 +14,7 @@
             <table class="table doc-datatable table-responsive-md">
                 <thead>
                     <tr>
-                        <th scope="col" class="text-center">#</th>
+                        <th scope="col" class="text-center">ลำดับ</th>
                         <th scope="col" class="text-center">เลขที่</th>
                         <th scope="col" class="text-center">ชื่อเรื่อง</th>
                         <th scope="col">ผู้ดำเนินงาน</th>
@@ -28,7 +28,18 @@
                         <td class="text-center">{{$index + 1}}</td>
                         <td class="text-center">{{$item->no}}</td>
                         <td>{{$item->topic}}</td>
-                        <td>{{$item->users}}</td>
+                        <td>
+                            @foreach ($item->handlers as $index => $handler)
+                            <div class="d-flex align-items-center">
+                                <p class="text-secondary m-0">{{$index + 1}}. {{$handler->user->getFullName()}}</p>
+                                @if ($handler->status == 1)
+                                <i class="fas fa-check-circle p-1" style='color:#28a745'></i>
+                                @else
+                                <i class="fas fa-times-circle p-1" style='color:#dc3545'></i>
+                                @endif
+                            </div>
+                            @endforeach
+                        </td>
                         <td class="text-center">
                             @if ($item->status == 1)
                             <span class="badge text-bg-warning">{{$item->docStatus->name}}</span>

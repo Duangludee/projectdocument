@@ -17,7 +17,7 @@
                         <th scope="col" class="text-center">ลำดับ</th>
                         <th scope="col" class="text-center">เลขที่</th>
                         <th scope="col" class="text-center">ชื่อเรื่อง</th>
-                        <th scope="col">ผู้ดำเนินงาน</th>
+                        <th scope="col">ผู้ดำเนินการ</th>
                         <th scope="col" class="text-center">สถานะ</th>
                         <th scope="col" class="text-center">จัดการ</th>
                     </tr>

@@ -38,6 +38,7 @@
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
 
+
     @stack('css')
 
     <style>
@@ -135,6 +136,8 @@
     <script src="{{asset('plugins/select2/js/select2.full.min.js')}}"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js"></script>
+
+
 
     @stack('scripts')
 </body>

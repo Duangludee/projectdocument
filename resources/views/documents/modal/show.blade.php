@@ -40,9 +40,26 @@
                     <i class="fas fa-check-circle p-1" style='color:#28a745'></i>
                     @else
                     <i class="fas fa-times-circle p-1" style='color:#dc3545'></i>
+
                     @endif
                 </div>
                 @endforeach
+            </div>
+            {{-- แนบไฟล์ --}}
+            <div class="form-group row px-2">
+                <label class="col-sm-auto col-form-label ps-0" for="formFile">แนบไฟล์</label>
+                <div class="col-sm-6 px-0">
+                    <input class="form-control @error('file') is-invalid @enderror" type="file" id="formFile" name="file" accept="image/*" value="{{ old('file') }}">
+
+                    @error('file')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                    @enderror
+                </div>
+            </div>
+            <div class="text-center">
+                <button type="button" class="btn btn-success" id="btnSubmit">ยืนยัน</button>
             </div>
         </div>
         <div class="modal-footer">

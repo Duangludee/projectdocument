@@ -22,15 +22,36 @@
                 data-accordion="false">
                 <li class="nav-item">
                     <a href="{{route('dashboard')}}" class="nav-link {{ Route::is('dashboard') ? 'active' : '' }}">
-                        <i class="far fa-circle nav-icon"></i>
+                        <i class='fas fa-th' style='font-size:24px'></i>
                         <p>Dashboard</p>
                     </a>
                 </li>
 
                 <li class="nav-item">
                     <a href="{{route('document.index')}}" class="nav-link {{ Route::is('document.*') ? 'active' : '' }}">
-                        <i class="far fa-circle nav-icon"></i>
+                        <i class='far fa-file-alt' style='font-size:24px'></i>
                         <p>รายการเอกสาร</p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="{{route('document.index')}}" class="nav-link {{ Route::is('document.*') ? 'active' : '' }}">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>ข้อมูลพื้นฐาน</p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="{{route('document.index')}}" class="nav-link {{ Route::is('document.*') ? 'active' : '' }}">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>จัดการสิทธิ์ผู้ใช้งาน</p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="{{route('document.index')}}" class="nav-link {{ Route::is('document.*') ? 'active' : '' }}">
+                        <i class='fas fa-sign-out-alt' style='font-size:24px'></i>
+                        <p>ออกจากระบบ</p>
                     </a>
                 </li>
             </ul>

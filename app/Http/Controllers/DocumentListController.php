@@ -27,6 +27,7 @@ class DocumentListController extends Controller
         return view('documents.index', compact('documents'));
     }
 
+
     /**
      * Show the form for creating a new resource.
      *

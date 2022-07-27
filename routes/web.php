@@ -25,6 +25,11 @@ Route::prefix('document')->group(function () {
     Route::get('/create', [App\Http\Controllers\DocumentListController::class, 'create'])->name('document.create');
     Route::post('/store', [App\Http\Controllers\DocumentListController::class, 'store'])->name('document.store');
 
+//     Route::get('xsds',function (){
+// return view('')
+//     }
+//     )
+
     Route::get('/{id}/edit', [App\Http\Controllers\DocumentListController::class, 'edit'])->name('document.edit');
     Route::put('/{docId}/update', [App\Http\Controllers\DocumentListController::class, 'update'])->name('document.update');
 });

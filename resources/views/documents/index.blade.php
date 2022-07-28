@@ -3,6 +3,7 @@
 @section('content')
     <div class="card">
         <div class="card-header">
+
             <h5>รายการเอกสาร
                 <span class="float-end">
                     <a href="{{route('document.create')}}" class="btn btn-primary">เพิ่มเอกสาร</a>
@@ -74,6 +75,16 @@
                     {orderable: false, targets: [4,5]}
                 ]
             })
+
+            $('#btnSubmit').on('click', function () {
+                showAlertWithCallBack('warning', 'คุณต้องการเพิ่มเอกสาร?').then(
+                    (ok) => {
+                        if (!ok) return;
+
+                        $('#docCreateForm').submit();
+                    }
+                );
+            });
         });
     </script>
 @endpush

@@ -24,6 +24,20 @@ class DocumentListController extends Controller
         $documents = Document::orderBy('created_at', 'DESC')->get();
         $documents->load('docStatus');
         $documents->load('handlers.user');
+
+        foreach ($documents as $key => $value) {
+            //     if(count())
+            //    echo $value->handlers;
+            $count = 0;
+            foreach ($value->handlers as $key => $v) {
+                if ($v->status == 1) {
+                    $count++;
+                }
+            }
+            if ($count == count($value->handlers)) {
+                Document::where('id', $value->id)->update(['status' => 2]);
+            }
+        }
         return view('documents.index', compact('documents'));
     }
 
@@ -35,7 +49,7 @@ class DocumentListController extends Controller
      */
     public function create()
     {
-        $users = User::whereIn('role_id', [2,3])->get();
+        $users = User::whereIn('role_id', [2, 3])->get();
         return view('documents.create', compact('users'));
     }
 
@@ -113,7 +127,7 @@ class DocumentListController extends Controller
         $document = Document::where('id', $id)->first();
         $document->load('docStatus');
         $document->load('handlers.user');
-        $users = User::whereIn('role_id', [2,3])->get();
+        $users = User::whereIn('role_id', [2, 3])->get();
         return view('documents.edit', compact('document', 'users'));
     }
 
@@ -166,12 +180,13 @@ class DocumentListController extends Controller
         //         Handlers::where('document_id', $document->id)->delete();
         //     }
 
-        //     foreach ($request->users as $key => $id) {
-        //         $handler = new Handlers;
-        //         $handler->document_id = $document->id;
-        //         $handler->user_id = $id;
-        //         $handler->save();
-        //     }
+        // foreach ($request->users as $key => $id) {
+        //     $handler = new Handlers;
+        //     $handler->document_id = $document->id;
+        //     $handler->user_id = $id;
+        //     $handler->status = 1;
+        //     $handler->save();
+        // }
         // }
         DB::commit();
 
@@ -188,5 +203,49 @@ class DocumentListController extends Controller
     public function destroy($id)
     {
         //
+    }
+    // --------------------------------------------------------------------------
+    public function update_showImage(Request $request, $docId)
+    {
+
+        DB::beginTransaction();
+        $request->validate([
+            // 'status' => 'required',
+            'file' => 'required|image|mimes:jpeg,png,jpg,svg'
+        ]);
+
+        $handler = Handlers::where(['document_id' => $docId, 'user_id' => 2])->update(['status' => 1]);
+        $document = Document::where('id', $docId)->with('handlers')->first();
+        if ($request->hasFile('file')) {
+            $file = $request->file('file');
+            $imageName = 'DOC_' . time() . '_'  . $file->getClientOriginalName();
+            $imageName . $file->getExtension();
+            $document->file = $imageName;
+            $file->storeAs('public/' . Constants::$DOC_PATH, $imageName);
+
+            if (Storage::disk('public')->exists(Constants::$DOC_PATH . $document->file)) {
+                Storage::delete(Constants::$DOC_PATH . $document->file);
+            }
+        }
+
+        $document->save();
+
+        //แก้เพิ่ม
+        // if (count($request->users) > 0) {
+        //     if (count($document->handlers) > 0) {
+        //         Handlers::where('document_id', $document->id)->delete();
+        //     }
+
+        //     foreach ($request->users as $key => $id) {
+        //         $handler = new Handlers;
+        //         $handler->document_id = $document->id;
+        //         $handler->user_id = $id;
+        //         $handler->save();
+        //     }
+        // }
+        DB::commit();
+
+        $status = new Alert('success', 'สำเร็จ', 'แก้ไขเอกสารเรียบร้อยแล้ว');
+        return back()->with('status', $status);
     }
 }

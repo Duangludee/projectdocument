@@ -12,6 +12,14 @@
         </div>
 
         <div class="card-body">
+            <div class="d-flex">
+                <i class="fas fa-check-circle p-1" style='color:#28a745'></i>
+                <p class="m-0">= ลงนามแล้ว</p>
+
+                <i class="fas fa-times-circle p-1 ms-3" style='color:#dc3545'></i>
+                <p class="m-0">= ยังไม่ลงนาม</p>
+            </div>
+
             <table class="table doc-datatable table-responsive-md">
                 <thead>
                     <tr>
@@ -32,7 +40,14 @@
                         <td>
                             @foreach ($item->handlers as $index => $handler)
                             <div class="d-flex align-items-center">
+                                @if (isset($handler->image_name))
+                                <a href="#" data-fancybox data-src="{{ url($handler->getFullImagePath()) }}" data-caption="{{$handler->image_name}}">
+                                    {{ $index + 1 }}. {{ $handler->user->getFullName() }}
+                                </a>
+                                @else
                                 <p class="text-secondary m-0">{{$index + 1}}. {{$handler->user->getFullName()}}</p>
+                                @endif
+
                                 @if ($handler->status == 1)
                                 <i class="fas fa-check-circle p-1" style='color:#28a745'></i>
                                 @else
@@ -64,11 +79,16 @@
     </div>
 @endsection
 
+@push('css')
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.css" />
+@endpush
+
 @push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.umd.js"></script>
     <script>
         $(function() {
             $(".doc-datatable").DataTable({
-                "responsive": true,
+                "responsive": false,
                 "lengthChange": false,
                 "autoWidth": false,
                 columnDefs: [

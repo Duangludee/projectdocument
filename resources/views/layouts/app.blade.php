@@ -137,7 +137,18 @@
 
     <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js"></script>
 
+    <script>
+        function onLogout() {
+            showAlertWithCallBack('warning', '', 'คุณต้องการออกจากระบบ?')
+            .then(
+                (ok) => {
+                    if (!ok) return;
 
+                    $('#logoutForm').submit();
+                }
+            );
+        }
+    </script>
 
     @stack('scripts')
 </body>

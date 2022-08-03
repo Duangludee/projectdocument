@@ -37,7 +37,14 @@
                     <label for="for" class="form-label">ผู้ดำเนินการ</label>
                     @foreach ($item->handlers as $index => $handler)
                         <div class="d-flex align-items-center">
-                            <p class="text-secondary m-0">{{ $index + 1 }}. {{ $handler->user->getFullName() }}</p>
+                            @if (isset($handler->image_name))
+                            <a href="#" data-fancybox data-src="{{ url($handler->getFullImagePath()) }}" data-caption="{{$handler->image_name}}">
+                                {{ $index + 1 }}. {{ $handler->user->getFullName() }}
+                            </a>
+                            @else
+                            <p class="text-secondary m-0">{{$index + 1}}. {{$handler->user->getFullName()}}</p>
+                            @endif
+
                             @if ($handler->status == 1)
                                 <i class="fas fa-check-circle p-1" style='color:#28a745'></i>
                             @else
@@ -47,13 +54,25 @@
                     @endforeach
                 </div>
                 {{-- แนบไฟล์ --}}
-                <form action="{{ route('doc.update', ['docId' => $item->id]) }}" method="POST"
-                    enctype="multipart/form-data" id="docCreateForm">
+                @php
+                    $ar = [];
+                    foreach ($item->handlers as $key => $value) {
+                        if ($value->user_id == auth()->user()->id) {
+                            array_push($ar, true);
+                        }else {
+                            array_push($ar, false);
+                        }
+                    }
+                    $check = in_array(true, $ar);
+                @endphp
+                @if (auth()->user()->role_id == 2 && $check)
+
+                <form action="{{ route('doc.update', ['docId' => $item->id]) }}" method="POST" enctype="multipart/form-data" id="docCreateForm">
                     @csrf
                     @method('PUT')
-                    <div class="form-group row px-2">
-                        <label class="col-sm-auto col-form-label ps-0" for="formFile">แนบไฟล์</label>
-                        <div class="col-sm-6 px-0">
+                    <div class="form-group row px-2 mt-3">
+                        <label class="col-sm-auto col-form-label ps-0" for="formFile">แนบรูป</label>
+                        <div class="col-sm-auto px-0">
                             <input class="form-control @error('file') is-invalid @enderror" type="file"
                                 id="formFile" name="file" accept="image/*" value="{{ old('file') }}">
 
@@ -66,8 +85,10 @@
                     </div>
                 </form>
                 <div class="text-center">
-                    <button type="submit" class="btn btn-success" id="btnSubmit">ยืนยัน</button>
+                    <button type="submit" class="btn btn-success" id="btnSubmit">Upload</button>
                 </div>
+
+                @endif
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ปิด</button>

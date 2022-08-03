@@ -15,6 +15,25 @@
                 @csrf
                 @method('PUT')
 
+                <div class="text-center">
+                    <div class="my-3">
+                        <img class="img-thumbnail" src="{{url($document->getDocImage())}}" alt="DOC" width="500px">
+                    </div>
+
+                    <div class="form-group row justify-content-center px-2 mb-5">
+                        <label class="col-sm-auto col-form-label ps-0" for="formFile">แนบไฟล์</label>
+                        <div class="col-sm-6 px-0">
+                            <input class="form-control @error('file') is-invalid @enderror" type="file" id="formFile" name="file" accept="image/*">
+
+                            @error('file')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
+                        </div>
+                    </div>
+                </div>
+
                 <div class="form-group row px-2">
                     <label for="no" class="col-sm-auto col-form-label ps-0">เลขที่</label>
                     <div class="col-sm-6 px-0">
@@ -118,23 +137,6 @@
                             <strong>{{ $message }}</strong>
                         </span>
                     @enderror
-                    </div>
-                </div>
-
-                <div class="my-3">
-                    <img class="img-thumbnail" src="{{url($document->getDocImage())}}" alt="DOC" width="500px">
-                </div>
-
-                <div class="form-group row px-2">
-                    <label class="col-sm-auto col-form-label ps-0" for="formFile">แนบไฟล์</label>
-                    <div class="col-sm-6 px-0">
-                        <input class="form-control @error('file') is-invalid @enderror" type="file" id="formFile" name="file" accept="image/*">
-
-                        @error('file')
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
-                        </span>
-                        @enderror
                     </div>
                 </div>
             </form>

@@ -16,16 +16,31 @@ use Illuminate\Support\Facades\Route;
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::get('/', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
+// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::prefix('document')->group(function () {
+Route::middleware('auth')->group(function (){
+    Route::get('/', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
 
-    Route::get('/', [App\Http\Controllers\DocumentListController::class, 'index'])->name('document.index');
-    Route::get('/create', [App\Http\Controllers\DocumentListController::class, 'create'])->name('document.create');
-    Route::post('/store', [App\Http\Controllers\DocumentListController::class, 'store'])->name('document.store');
+    Route::prefix('document')->group(function () {
 
-    Route::get('/{id}/edit', [App\Http\Controllers\DocumentListController::class, 'edit'])->name('document.edit');
-    Route::put('/{docId}/update', [App\Http\Controllers\DocumentListController::class, 'update'])->name('document.update');
-    Route::put('/{docId}/comfirm', [App\Http\Controllers\DocumentListController::class, 'update_showImage'])->name('doc.update');
+        Route::get('/', [App\Http\Controllers\DocumentListController::class, 'index'])->name('document.index');
+        Route::get('/create', [App\Http\Controllers\DocumentListController::class, 'create'])->name('document.create');
+        Route::post('/store', [App\Http\Controllers\DocumentListController::class, 'store'])->name('document.store');
+
+        Route::get('/{id}/edit', [App\Http\Controllers\DocumentListController::class, 'edit'])->name('document.edit');
+        Route::put('/{docId}/update', [App\Http\Controllers\DocumentListController::class, 'update'])->name('document.update');
+        Route::put('/{docId}/comfirm', [App\Http\Controllers\DocumentListController::class, 'update_showImage'])->name('doc.update');
+    });
+
+    Route::prefix('setting')->group(function () {
+
+        Route::prefix('information')->group(function () {
+            Route::get('/', [App\Http\Controllers\InformationsController::class, 'index'])->name('setting.information.index');
+        });
+
+        Route::prefix('permission')->group(function () {
+            Route::get('/', [App\Http\Controllers\PermissionsController::class, 'index'])->name('setting.permission.index');
+        });
+
+    });
 });

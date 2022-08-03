@@ -25,19 +25,19 @@ class DocumentListController extends Controller
         $documents->load('docStatus');
         $documents->load('handlers.user');
 
-        foreach ($documents as $key => $value) {
-            //     if(count())
-            //    echo $value->handlers;
-            $count = 0;
-            foreach ($value->handlers as $key => $v) {
-                if ($v->status == 1) {
-                    $count++;
-                }
-            }
-            if ($count == count($value->handlers)) {
-                Document::where('id', $value->id)->update(['status' => 2]);
-            }
-        }
+        // foreach ($documents as $key => $value) {
+        //     //     if(count())
+        //     //    echo $value->handlers;
+        //     $count = 0;
+        //     foreach ($value->handlers as $key => $v) {
+        //         if ($v->status == 1) {
+        //             $count++;
+        //         }
+        //     }
+        //     if ($count == count($value->handlers)) {
+        //         Document::where('id', $value->id)->update(['status' => 2]);
+        //     }
+        // }
         return view('documents.index', compact('documents'));
     }
 
@@ -84,7 +84,7 @@ class DocumentListController extends Controller
         if ($request->hasFile('file')) {
             $file = $request->file('file');
             $imageName = 'DOC_' . time() . '_'  . $file->getClientOriginalName();
-            $imageName . $file->getExtension();
+            $imageName . $file->getClientOriginalExtension();
             $documents->file = $imageName;
             $file->storeAs('public/' . Constants::$DOC_PATH, $imageName);
         }
@@ -163,7 +163,7 @@ class DocumentListController extends Controller
         if ($request->hasFile('file')) {
             $file = $request->file('file');
             $imageName = 'DOC_' . time() . '_'  . $file->getClientOriginalName();
-            $imageName . $file->getExtension();
+            $imageName . $file->getClientOriginalExtension();
             $document->file = $imageName;
             $file->storeAs('public/' . Constants::$DOC_PATH, $imageName);
 
@@ -214,38 +214,37 @@ class DocumentListController extends Controller
             'file' => 'required|image|mimes:jpeg,png,jpg,svg'
         ]);
 
-        $handler = Handlers::where(['document_id' => $docId, 'user_id' => 2])->update(['status' => 1]);
-        $document = Document::where('id', $docId)->with('handlers')->first();
+        $userid = auth()->user()->id;
+        $handler = Handlers::where(['document_id' => $docId, 'user_id' => $userid])->first();
+        $document = Document::where('id', $docId)->first();
+
         if ($request->hasFile('file')) {
             $file = $request->file('file');
-            $imageName = 'DOC_' . time() . '_'  . $file->getClientOriginalName();
-            $imageName . $file->getExtension();
-            $document->file = $imageName;
-            $file->storeAs('public/' . Constants::$DOC_PATH, $imageName);
+            $imageName = 'SG' . $docId . '_' . $userid . '.' . $file->getClientOriginalExtension();
+            $handler->image_name = $imageName;
+            $file->storeAs('public/' . Constants::$SG_PATH . 'DOC_' . $docId, $imageName);
 
-            if (Storage::disk('public')->exists(Constants::$DOC_PATH . $document->file)) {
-                Storage::delete(Constants::$DOC_PATH . $document->file);
+            if (Storage::disk('public')->exists(Constants::$SG_PATH . 'DOC_' . $docId . $handler->image_name)) {
+                Storage::delete(Constants::$SG_PATH . 'DOC_' . $docId . $handler->image_name);
             }
         }
 
-        $document->save();
+        $handler->status = 1;
+        $handler->save();
 
-        //แก้เพิ่ม
-        // if (count($request->users) > 0) {
-        //     if (count($document->handlers) > 0) {
-        //         Handlers::where('document_id', $document->id)->delete();
-        //     }
-
-        //     foreach ($request->users as $key => $id) {
-        //         $handler = new Handlers;
-        //         $handler->document_id = $document->id;
-        //         $handler->user_id = $id;
-        //         $handler->save();
-        //     }
-        // }
+        $handlers = Handlers::where(['document_id' => $docId])->get();
+        $ar = [];
+        foreach ($handlers as $key => $value) {
+            array_push($ar, $value->status);
+        }
+        $check = count(array_unique($ar)) === 1;
+        if ($check) {
+            $document->status = 2;
+            $document->save();
+        }
         DB::commit();
 
-        $status = new Alert('success', 'สำเร็จ', 'แก้ไขเอกสารเรียบร้อยแล้ว');
+        $status = new Alert('success', 'สำเร็จ', 'เอกสารเลขที่ ' . $document->no . ' อัพโหลดรูปสำเร็จแล้ว');
         return back()->with('status', $status);
     }
 }

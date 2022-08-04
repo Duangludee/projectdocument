@@ -50,9 +50,9 @@
                         </a>
                       </li>
                       <li class="nav-item">
-                        <a href="{{ route('setting.permission.index') }}" class="nav-link {{ Route::is('setting.permission.index') ? 'active' : '' }}">
+                        <a href="{{ route('setting.user.index') }}" class="nav-link {{ Route::is('setting.user.index') ? 'active' : '' }}">
                           <i class="far fa-circle nav-icon"></i>
-                          <p>จัดการสิทธิ์ผู้ใช้งาน</p>
+                          <p>จัดการผู้ใช้งาน</p>
                         </a>
                       </li>
                     </ul>

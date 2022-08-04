@@ -38,8 +38,10 @@ Route::middleware('auth')->group(function (){
             Route::get('/', [App\Http\Controllers\InformationsController::class, 'index'])->name('setting.information.index');
         });
 
-        Route::prefix('permission')->group(function () {
-            Route::get('/', [App\Http\Controllers\PermissionsController::class, 'index'])->name('setting.permission.index');
+        Route::prefix('user')->group(function () {
+            Route::get('/', [App\Http\Controllers\UsersController::class, 'index'])->name('setting.user.index');
+            Route::post('/store', [App\Http\Controllers\UsersController::class, 'store'])->name('setting.user.store');
+            Route::put('/{userId}/update', [App\Http\Controllers\UsersController::class, 'update'])->name('setting.user.update');
         });
 
     });

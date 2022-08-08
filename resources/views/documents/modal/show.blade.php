@@ -18,6 +18,12 @@
                     </div>
                 </div>
 
+                <div class="d-flex justify-content-center">
+                    <a href="#" data-fancybox data-src="{{ url($item->getDocImage()) }}" data-caption="{{$item->file}}">
+                        <img src="{{$item->getDocImage()}}" alt="Document iamge" class="img-thumbnail" width="100px">
+                    </a>
+                </div>
+
                 <div class="mb-3">
                     <label for="topic" class="form-label">เรื่อง</label>
                     <input type="text" class="form-control" id="topic" value="{{ $item->topic }}" readonly>

@@ -14,3 +14,17 @@ function showAlertWithCallBack(type, title, msg) {
         }
     });
 }
+function showAlert(type, title, msg) {
+    return Swal.fire({
+        icon: type,
+        title: title,
+        text: msg,
+        confirmButtonText: 'ยืนยัน',
+      }).then((result) => {
+        if (result.isConfirmed) {
+            return true;
+        }else {
+            return false;
+        }
+    });
+}

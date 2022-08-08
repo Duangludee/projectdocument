@@ -19,7 +19,7 @@ class UsersController extends Controller
     public function index()
     {
         $roles = Role::all();
-        $users = User::orderBy('id', 'DESC')->get();
+        $users = User::with('role')->orderBy('id', 'DESC')->get();
         return view('settings.users.index', compact('roles', 'users'));
     }
 
@@ -99,8 +99,6 @@ class UsersController extends Controller
     public function update(Request $request, $userId)
     {
         $request->validate([
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|string|min:8',
             // 'prefix' => 'required',
             'firstname' => 'required|string|max:255',
             'lastname' => 'required|string|max:255',
@@ -111,8 +109,6 @@ class UsersController extends Controller
         DB::beginTransaction();
         $user = User::where('id', $userId)->first();
         // $user->prefix = $request->prefix;
-        $user->email = $request->email;
-        $user->password = Hash::make($request->password);
         $user->firstname = $request->firstname;
         $user->lastname = $request->lastname;
         $user->phone = $request->phone;
@@ -120,8 +116,7 @@ class UsersController extends Controller
         $user->save();
         DB::commit();
 
-        $status = new Alert('success', 'สำเร็จ', 'เพิ่มผู้ใช้งานเรียบร้อยแล้ว');
-        return back()->with('status', $status);
+        return response()->json(['status' => true]);
     }
 
     /**
@@ -130,8 +125,13 @@ class UsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($userId)
     {
-        //
+        DB::beginTransaction();
+        User::where('id', $userId)->delete();
+        DB::commit();
+
+        $status = new Alert('success', 'สำเร็จ', 'ลบผู้ใช้งานเรียบร้อยแล้ว');
+        return back()->with('status', $status);
     }
 }

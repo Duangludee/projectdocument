@@ -36,12 +36,16 @@ Route::middleware('auth')->group(function (){
 
         Route::prefix('information')->group(function () {
             Route::get('/', [App\Http\Controllers\InformationsController::class, 'index'])->name('setting.information.index');
+            Route::post('/store', [App\Http\Controllers\InformationsController::class, 'store'])->name('setting.information.store');
+            Route::put('/{orId}/update', [App\Http\Controllers\InformationsController::class, 'update'])->name('setting.information.update');
+            Route::delete('/{orId}/destroy', [App\Http\Controllers\InformationsController::class, 'destroy'])->name('setting.information.destroy');
         });
 
         Route::prefix('user')->group(function () {
             Route::get('/', [App\Http\Controllers\UsersController::class, 'index'])->name('setting.user.index');
             Route::post('/store', [App\Http\Controllers\UsersController::class, 'store'])->name('setting.user.store');
             Route::put('/{userId}/update', [App\Http\Controllers\UsersController::class, 'update'])->name('setting.user.update');
+            Route::delete('/{userId}/destroy', [App\Http\Controllers\UsersController::class, 'destroy'])->name('setting.user.destroy');
         });
 
     });

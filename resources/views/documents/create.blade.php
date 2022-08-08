@@ -72,27 +72,37 @@
                 <div class="row my-3">
                     <div class="col-lg-6">
                         <div class="form-group m-0">
-                            <label for="from">จาก</label>
-                            <input type="text" class="form-control @error('from') is-invalid @enderror" id="from" name="from" placeholder="จาก" value="{{ old('from') }}" >
+                            <label for="from" class="col-sm-auto col-form-label ps-0">ผู้ดำเนินงาน</label>
+                            <select class="form-control select-from @error('from') is-invalid @enderror" name="from">
+                                <option value="" selected disabled>กรุณาเลือกหน่วยงาน</option>
+                                @foreach ($organizations as $item)
+                                <option value="{{$item->name}}" {{ old('from' == $item->name ? 'selected' : '') }}>{{$item->name}}</option>
+                                @endforeach
+                            </select>
 
                             @error('from')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
                             </span>
-                        @enderror
+                             @enderror
                         </div>
                     </div>
 
                     <div class="col-lg-6">
                         <div class="form-group m-0">
-                            <label for="for">ถึง</label>
-                            <input type="text" class="form-control @error('for') is-invalid @enderror" id="for" name="for" placeholder="ถึง" value="{{ old('for') }}">
+                            <label for="for" class="col-sm-auto col-form-label ps-0">ถึง</label>
+                            <select class="form-control select-for @error('for') is-invalid @enderror" name="for">
+                                <option value="" selected disabled>กรุณาเลือกหน่วยงาน</option>
+                                @foreach ($organizations as $item)
+                                <option value="{{$item->name}}" {{ old('for' == $item->name ? 'selected' : '') }}>{{$item->name}}</option>
+                                @endforeach
+                            </select>
 
                             @error('for')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
                             </span>
-                        @enderror
+                             @enderror
                         </div>
                     </div>
                 </div>
@@ -178,6 +188,8 @@
                 scrollbar: true
             });
             $('.select-users').select2();
+            $('.select-from').select2();
+            $('.select-for').select2();
 
             $('#btnSubmit').on('click', function () {
                 showAlertWithCallBack('warning', 'คุณต้องการเพิ่มเอกสาร?').then(

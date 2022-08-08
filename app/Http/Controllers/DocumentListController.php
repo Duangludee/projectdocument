@@ -8,6 +8,7 @@ use App\Http\Utils\DateUtil;
 use Illuminate\Http\Request;
 use App\Models\Document;
 use App\Models\Handlers;
+use App\Models\Organization;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -50,7 +51,8 @@ class DocumentListController extends Controller
     public function create()
     {
         $users = User::whereIn('role_id', [2, 3])->get();
-        return view('documents.create', compact('users'));
+        $organizations = Organization::all();
+        return view('documents.create', compact('users', 'organizations'));
     }
 
     /**
@@ -102,7 +104,7 @@ class DocumentListController extends Controller
         DB::commit();
 
         $status = new Alert('success', 'สำเร็จ', 'เพิ่มเอกสารเรียบร้อยแล้ว');
-        return back()->with('status', $status);
+        return redirect()->route('document.index')->with('status', $status);
     }
 
     /**

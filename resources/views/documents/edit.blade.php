@@ -17,7 +17,9 @@
 
                 <div class="text-center">
                     <div class="my-3">
-                        <img class="img-thumbnail" src="{{url($document->getDocImage())}}" alt="DOC" width="500px">
+                        <a href="#" data-fancybox data-src="{{ url($document->getDocImage()) }}" data-caption="{{$document->file}}">
+                            <img src="{{$document->getDocImage()}}" alt="Document iamge" class="img-thumbnail" width="256px">
+                        </a>
                     </div>
 
                     <div class="form-group row justify-content-center px-2 mb-5">
@@ -145,6 +147,7 @@
 @endsection
 
 @push('css')
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.css" />
     <style>
         .form-inline {
             display: flex;
@@ -153,6 +156,7 @@
 @endpush
 
 @push('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.umd.js"></script>
     <script>
         $(document).ready(function () {
 

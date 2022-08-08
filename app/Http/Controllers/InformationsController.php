@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Utils\Alert;
+use App\Models\Organization;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class InformationsController extends Controller
 {
@@ -13,7 +16,8 @@ class InformationsController extends Controller
      */
     public function index()
     {
-        return view('settings.informations.index');
+        $organizations = Organization::all();
+        return view('settings.informations.index', compact('organizations'));
     }
 
     /**
@@ -34,7 +38,17 @@ class InformationsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'organization_name' => 'required|string|max:255'
+        ]);
+        DB::beginTransaction();
+        $or = new Organization;
+        $or->name = $request->organization_name;
+        $or->save();
+        DB::commit();
+
+        $status = new Alert('success', 'สำเร็จ', 'เพิ่มหน่วยงานเรียบร้อยแล้ว');
+        return back()->with('status', $status);
     }
 
     /**
@@ -66,9 +80,18 @@ class InformationsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $orId)
     {
-        //
+        $request->validate([
+            'organization_name' => 'required|string|max:255'
+        ]);
+        DB::beginTransaction();
+        $or = Organization::where('id', $orId)->first();
+        $or->name = $request->organization_name;
+        $or->save();
+        DB::commit();
+
+        return response()->json(['status' => true]);
     }
 
     /**
@@ -77,8 +100,13 @@ class InformationsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($orId)
     {
-        //
+        DB::beginTransaction();
+        Organization::where('id', $orId)->delete();
+        DB::commit();
+
+        $status = new Alert('success', 'สำเร็จ', 'ลบหน่วยงานเรียบร้อยแล้ว');
+        return back()->with('status', $status);
     }
 }

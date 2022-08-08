@@ -119,9 +119,16 @@
                             </button>
                             @include('settings.users.modal.edit')
 
-                            <button type="button" class="btn btn-danger btn-sm">
+                            @if ($user->role_id != 1)
+                            <button type="button" class="btn btn-danger btn-sm delete-btn">
                                 <i class="fas fa-trash-alt"></i>
                             </button>
+
+                            <form action="{{route('setting.user.destroy', ['userId' => $user->id])}}" method="post">
+                                @csrf
+                                @method('DELETE')
+                            </form>
+                            @endif
                         </td>
                     </tr>
                     @endforeach
@@ -167,17 +174,47 @@
                     (ok) => {
                         if (!ok) return;
 
-                        // const id = $('.createUserForm input[name=user_id]').val();
-                        // console.log(id);
-                        // $.ajax({
-                        //     type: "PUT",
-                        //     url: `/setting/user/${}/update`,
-                        //     data: "data",
-                        //     dataType: "dataType",
-                        //     success: function (response) {
+                        const id = $('.createUserForm input[name=user_id]').val();
+                        const firstname = $('.createUserForm input[name=firstname]').val();
+                        const lastname = $('.createUserForm input[name=lastname]').val();
+                        const phone = $('.createUserForm input[name=phone]').val();
+                        const role = $('.createUserForm #role').val();
 
-                        //     }
-                        // });
+                        $.ajax({
+                            type: "PUT",
+                            url: `/setting/user/${id}/update`,
+                            data: {
+                                _token: "{{ csrf_token() }}",
+                                firstname,
+                                lastname,
+                                phone,
+                                role
+                            },
+                            success: function (response) {
+                                const {status} = response
+                                if (status) {
+                                    showAlert('success', 'สำเร็จ')
+                                    .then(ok => {
+                                        if (ok) {
+                                            window.location.reload();
+                                        }
+                                    })
+                                }
+                            }
+                        });
+                    }
+                );
+            });
+
+            // DELETE
+            $(document).on('click', '.delete-btn', function () {
+                showAlertWithCallBack('warning', 'กรุณาตรวจสอบข้อมูลให้ถูกต้อง')
+                .then(
+                    (ok) => {
+                        if (!ok) return
+
+                        const form = $(this).closest('td').find('form');
+                        form.submit();
                     }
                 );
             });

@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@section('content-header')
+<x-content-header title="เพิ่มเอกสาร" titleLink1="เอกสาร" link1="/document" titleLink2="เพิ่มเอกสาร"/>
+@endsection
+
 @section('content')
     <div class="card">
         <div class="card-header">
@@ -72,7 +76,7 @@
                 <div class="row my-3">
                     <div class="col-lg-6">
                         <div class="form-group m-0">
-                            <label for="from" class="col-sm-auto col-form-label ps-0">ผู้ดำเนินงาน</label>
+                            <label for="from" class="col-sm-auto col-form-label ps-0">จาก</label>
                             <select class="form-control select-from @error('from') is-invalid @enderror" name="from">
                                 <option value="" selected disabled>กรุณาเลือกหน่วยงาน</option>
                                 @foreach ($organizations as $item)

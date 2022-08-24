@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@section('content-header')
+<x-content-header title="แก้ไขเอกสาร" titleLink1="เอกสาร" link1="/document" titleLink2="แก้ไขเอกสาร"/>
+@endsection
+
 @section('content')
     <div class="card">
         <div class="card-header">

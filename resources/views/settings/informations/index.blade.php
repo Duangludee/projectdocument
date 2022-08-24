@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@section('content-header')
+<x-content-header title="หน่วยงาน" titleLink2="หน่วยงาน"/>
+@endsection
+
 @section('content')
     <div class="row justify-content-center">
         <div class="col-md-8">

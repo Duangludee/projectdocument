@@ -12,7 +12,7 @@
                     <input type="hidden" name="user_id" value="{{ $user->id }}">
                     <div class="form-group">
                         <label for="email">Email</label>
-                        <input type="email" class="form-control @error('email') is-invalid @enderror" name="email" id="email" value="{{ $user->email }}" readonly>
+                        <input type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ $user->email }}" readonly>
 
                         @error('email')
                         <span class="invalid-feedback" role="alert">{{ $message }}</span>
@@ -21,7 +21,7 @@
 
                     <div class="form-group">
                         <label for="firstname">ชื่อ</label>
-                        <input type="text" class="form-control @error('firstname') is-invalid @enderror" name="firstname" id="firstname" value="{{ $user->firstname }}">
+                        <input type="text" class="form-control @error('firstname') is-invalid @enderror" name="firstname" value="{{ $user->firstname }}">
 
                         @error('firstname')
                         <span class="invalid-feedback" role="alert">{{ $message }}</span>
@@ -30,7 +30,7 @@
 
                     <div class="form-group">
                         <label for="lastname">นามสกุล</label>
-                        <input type="text" class="form-control @error('lastname') is-invalid @enderror" name="lastname" id="lastname" value="{{ $user->lastname }}">
+                        <input type="text" class="form-control @error('lastname') is-invalid @enderror" name="lastname" value="{{ $user->lastname }}">
 
                         @error('lastname')
                         <span class="invalid-feedback" role="alert">{{ $message }}</span>
@@ -39,7 +39,7 @@
 
                     <div class="form-group">
                         <label for="phone">เบอร์โทรศัพท์</label>
-                        <input type="text" class="form-control @error('phone') is-invalid @enderror" name="phone" id="phone" value="{{ $user->phone }}">
+                        <input type="text" class="form-control @error('phone') is-invalid @enderror" name="phone" value="{{ $user->phone }}">
 
                         @error('phone')
                         <span class="invalid-feedback" role="alert">{{ $message }}</span>
@@ -48,7 +48,7 @@
 
                     <div class="form-group">
                         <label for="role" class="text-danger">*</label><label for="role">ระดับ</label>
-                        <select name="role" id="role" class="form-control @error('role') is-invalid @enderror">
+                        <select name="role" class="form-control @error('role') is-invalid @enderror">
                             <option value="default" selected disabled>กรุณาเลือกระดับ</option>
                             @foreach ($roles as $item)
                             <option value="{{$item->id}}" {{ $user->role_id == $item->id ? 'selected' : '' }}>{{$item->name}}</option>

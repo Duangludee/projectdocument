@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@section('content-header')
+<x-content-header title="Dashboard" titleLink2="Dashboard"/>
+@endsection
+
 @section('content')
     <div>
         <!-- Small boxes (Stat box) -->
@@ -87,76 +91,89 @@
         </div>
         <!-- /.row -->
 
-        <!-- Small boxes (Stat box) -->
-        <div class="row">
-            <div class="col-lg-3">
-                <!-- small box -->
-                <div class="small-box card-out">
-                    <div class="inner text-center">
-                        <div class="d-none d-sm-flex justify-content-center mb-3">
-                            <img src="{{asset('assets/icons/out.png')}}" alt="OUT" width="150px">
-
-                            <div class="d-flex align-items-center px-3">
-                                <h3 class="m-0">150</h3>
-                            </div>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="card">
+                        <div class="card-body d-flex justify-content-center">
+                            <canvas id="docChart" class="w-50 h-auto"></canvas>
                         </div>
-
-                        <p>จำนวนเอกสารที่ส่งออก</p>
                     </div>
-                    <div class="icon">
-                        <i class="ion ion-bag"></i>
+                </div>
+                <div class="col-lg-6">
+                    <div class="card">
+                        <div class="card-body d-flex justify-content-center">
+                            <canvas id="teachChart" class="w-50 h-auto"></canvas>
+                        </div>
                     </div>
                 </div>
             </div>
-            <!-- ./col -->
-            <div class="col-lg-3">
-                <!-- small box -->
-                <div class="small-box card-in">
-                    <div class="inner text-center">
-                        <div class="d-none d-sm-flex justify-content-center mb-3">
-                            <img src="{{asset('assets/icons/in.png')}}" alt="IN" width="150px">
-
-                            <div class="d-flex align-items-center px-3">
-                                <h3 class="m-0">150</h3>
-                            </div>
-                        </div>
-
-                        <p>จำนวนเอกสารที่รับเข้า</p>
-                    </div>
-                    <div class="icon">
-                        <i class="ion ion-bag"></i>
-                    </div>
-                </div>
-            </div>
-            <!-- ./col -->
-            <div class="col-lg-3">
-                <!-- small box -->
-                <div class="small-box card-teach">
-                    <div class="inner text-center">
-                        <div class="d-none d-sm-flex justify-content-center mb-3">
-                            <img src="{{asset('assets/icons/teach.png')}}" alt="TEACH" width="150px">
-
-                            <div class="d-flex align-items-center px-3">
-                                <h3 class="m-0">150</h3>
-                            </div>
-                        </div>
-
-                        <div class="d-flex d-sm-none justify-content-center align-items-center px-3">
-                            <h3 class="m-0">150</h3>
-                        </div>
-
-                        <p>จำนวนอาจารย์</p>
-                    </div>
-                    <div class="icon">
-                        <i class="ion ion-bag"></i>
-                    </div>
-                </div>
-            </div>
-            <!-- ./col -->
         </div>
-        <!-- /.row -->
     </div>
 @endsection
+
+@push('scripts')
+<script>
+    $(function () {
+        const data = {
+            labels: ['สำเร็จ', 'รอดำเนินการ', 'ยกเลิก'],
+            datasets: [
+                {
+                    label: 'Dataset 1',
+                    data: [55, 49, 44],
+                    backgroundColor: ['green', 'yellow', 'red'],
+                },
+            ]
+        }
+
+        var docChart = new Chart("docChart", {
+            type: "pie",
+            data: data,
+            options: {
+                // responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Document Charts'
+                    }
+                }
+            },
+        });
+    });
+        $(function () {
+        const data = {
+            labels: ['สำเร็จ', 'รอดำเนินการ', 'ยกเลิก'],
+            datasets: [
+                {
+                    label: 'Teachset 1',
+                    data: [300, 50, 100],
+                    backgroundColor: ['green', 'yellow', 'red'],
+                    hoverOffset: 3
+                },
+            ]
+        }
+        var teachChart = new Chart("teachChart", {
+            type: 'doughnut',
+            data: data,
+            options: {
+                // responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Teach Chart'
+                    }
+                }
+            },
+        });
+    });
+</script>
+@endpush
 
 @push('css')
 <style>

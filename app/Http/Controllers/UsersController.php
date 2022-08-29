@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Utils\Alert;
+use App\Models\Prefix;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -18,9 +19,10 @@ class UsersController extends Controller
      */
     public function index()
     {
+        $prefixes = Prefix::all();
         $roles = Role::all();
         $users = User::with('role')->orderBy('id', 'DESC')->get();
-        return view('settings.users.index', compact('roles', 'users'));
+        return view('settings.users.index', compact('roles', 'users', 'prefixes'));
     }
 
     /**
@@ -44,7 +46,7 @@ class UsersController extends Controller
         $request->validate([
             'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:8',
-            // 'prefix' => 'required',
+            'prefix' => 'required',
             'firstname' => 'required|string|max:255',
             'lastname' => 'required|string|max:255',
             'phone' => 'required|string|max:10',
@@ -53,7 +55,7 @@ class UsersController extends Controller
 
         DB::beginTransaction();
         $user = new User;
-        // $user->prefix = $request->prefix;
+        $user->prefix = $request->prefix;
         $user->email = $request->email;
         $user->password = Hash::make($request->password);
         $user->firstname = $request->firstname;
@@ -99,7 +101,7 @@ class UsersController extends Controller
     public function update(Request $request, $userId)
     {
         $request->validate([
-            // 'prefix' => 'required',
+            'prefix' => 'required',
             'firstname' => 'required|string|max:255',
             'lastname' => 'required|string|max:255',
             'phone' => 'required|string|max:10',
@@ -108,7 +110,7 @@ class UsersController extends Controller
 
         DB::beginTransaction();
         $user = User::where('id', $userId)->first();
-        // $user->prefix = $request->prefix;
+        $user->prefix = $request->prefix;
         $user->firstname = $request->firstname;
         $user->lastname = $request->lastname;
         $user->phone = $request->phone;

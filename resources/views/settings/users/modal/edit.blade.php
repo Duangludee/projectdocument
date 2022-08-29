@@ -20,6 +20,20 @@
                     </div>
 
                     <div class="form-group">
+                        <label for="prefix">คำนำหน้า</label>
+                        <select name="prefix" class="form-control @error('prefix') is-invalid @enderror prefix">
+                            <option value="default" selected disabled>กรุณาเลือกคำนำหน้า</option>
+                            @foreach ($prefixes as $item)
+                            <option value="{{$item->id}}" {{ old('prefix') == $item->id ? 'selected' : '' }}>{{$item->name_th}}</option>
+                            @endforeach
+                        </select>
+
+                        @error('prefix')
+                        <span class="invalid-feedback" role="alert">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <div class="form-group">
                         <label for="firstname">ชื่อ</label>
                         <input type="text" class="form-control @error('firstname') is-invalid @enderror" name="firstname" value="{{ $user->firstname }}">
 
@@ -48,7 +62,7 @@
 
                     <div class="form-group">
                         <label for="role" class="text-danger">*</label><label for="role">ระดับ</label>
-                        <select name="role" class="form-control @error('role') is-invalid @enderror">
+                        <select name="role" class="form-control @error('role') is-invalid @enderror role">
                             <option value="default" selected disabled>กรุณาเลือกระดับ</option>
                             @foreach ($roles as $item)
                             <option value="{{$item->id}}" {{ $user->role_id == $item->id ? 'selected' : '' }}>{{$item->name}}</option>
@@ -63,7 +77,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ปิด</button>
-                <button type="button" class="btn btn-success" id="editBtn">บันทึก</button>
+                <button type="button" class="btn btn-success" id="editBtn" data-item="{{ $user }}">บันทึก</button>
             </div>
         </div>
     </div>

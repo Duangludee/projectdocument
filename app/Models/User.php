@@ -50,11 +50,16 @@ class User extends Authenticatable
 
     public function getFullName()
     {
-        return $this->firstname . ' ' . $this->lastname;
+        return $this->prefixes->name_th . ' ' . $this->firstname . ' ' . $this->lastname;
     }
 
     public function role()
     {
         return $this->belongsTo(Role::class, 'role_id');
+    }
+
+    public function prefixes()
+    {
+        return $this->belongsTo(Prefix::class, 'prefix');
     }
 }

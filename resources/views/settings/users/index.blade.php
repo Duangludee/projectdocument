@@ -41,6 +41,20 @@
                                         </div>
 
                                         <div class="form-group">
+                                            <label for="prefix">คำนำหน้า</label>
+                                            <select name="prefix" id="prefix" class="form-control @error('prefix') is-invalid @enderror">
+                                                <option value="default" selected disabled>กรุณาเลือกคำนำหน้า</option>
+                                                @foreach ($prefixes as $item)
+                                                <option value="{{$item->id}}" {{ old('prefix') == $item->id ? 'selected' : '' }}>{{$item->name_th}}</option>
+                                                @endforeach
+                                            </select>
+
+                                            @error('prefix')
+                                            <span class="invalid-feedback" role="alert">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+
+                                        <div class="form-group">
                                             <label for="firstname">ชื่อ</label>
                                             <input type="text" class="form-control @error('firstname') is-invalid @enderror" name="firstname" id="firstname" value="{{ old('firstname') }}">
 
@@ -178,17 +192,21 @@
                     (ok) => {
                         if (!ok) return;
 
-                        const id = $('.createUserForm input[name=user_id]').val();
-                        const firstname = $('.createUserForm input[name=firstname]').val();
-                        const lastname = $('.createUserForm input[name=lastname]').val();
-                        const phone = $('.createUserForm input[name=phone]').val();
-                        const role = $('.createUserForm #role').val();
+                        const jsonData = $(this).data('item')
+
+                        const id = jsonData['id']
+                        const prefix = jsonData['prefix']
+                        const firstname = jsonData['firstname']
+                        const lastname = jsonData['lastname']
+                        const phone = jsonData['phone']
+                        const role = jsonData['role']
 
                         $.ajax({
                             type: "PUT",
                             url: `/setting/user/${id}/update`,
                             data: {
                                 _token: "{{ csrf_token() }}",
+                                prefix,
                                 firstname,
                                 lastname,
                                 phone,

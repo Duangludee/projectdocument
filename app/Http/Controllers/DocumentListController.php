@@ -149,7 +149,7 @@ class DocumentListController extends Controller
             'from' => 'required',
             'for' => 'required',
             'users' => 'required',
-            'file' => 'required|image|mimes:jpeg,png,jpg,svg'
+            'file' => 'image|mimes:jpeg,png,jpg,svg'
         ]);
 
         $document = Document::where('id', $docId)->with('handlers')->first();
@@ -176,20 +176,19 @@ class DocumentListController extends Controller
 
         $document->save();
 
-        //แก้เพิ่ม
-        // if (count($request->users) > 0) {
-        //     if (count($document->handlers) > 0) {
-        //         Handlers::where('document_id', $document->id)->delete();
-        //     }
+        if (count($request->users) > 0) {
+            if (count($document->handlers) > 0) {
+                Handlers::where('document_id', $document->id)->delete();
+            }
 
-        // foreach ($request->users as $key => $id) {
-        //     $handler = new Handlers;
-        //     $handler->document_id = $document->id;
-        //     $handler->user_id = $id;
-        //     $handler->status = 1;
-        //     $handler->save();
-        // }
-        // }
+            foreach ($request->users as $key => $id) {
+                $handler = new Handlers;
+                $handler->document_id = $document->id;
+                $handler->user_id = $id;
+                $handler->status = 1;
+                $handler->save();
+            }
+        }
         DB::commit();
 
         $status = new Alert('success', 'สำเร็จ', 'แก้ไขเอกสารเรียบร้อยแล้ว');

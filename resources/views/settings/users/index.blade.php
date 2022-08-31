@@ -137,8 +137,8 @@
                             </button>
                             @include('settings.users.modal.edit')
 
-                            @if ($user->role_id != 1)
-                            <button type="button" class="btn btn-danger btn-sm delete-btn">
+                            {{-- @if ($user->role_id != 1) --}}
+                            <button type="button" class="btn btn-danger btn-sm delete-btn" {{ $user->role_id == 1 ? 'disabled' : '' }}>
                                 <i class="fas fa-trash-alt"></i>
                             </button>
 
@@ -146,7 +146,7 @@
                                 @csrf
                                 @method('DELETE')
                             </form>
-                            @endif
+                            {{-- @endif --}}
                         </td>
                     </tr>
                     @endforeach
@@ -192,27 +192,30 @@
                     (ok) => {
                         if (!ok) return;
 
-                        const jsonData = $(this).data('item')
+                        let modalBody = $(this).closest('div').parent()
 
-                        const id = jsonData['id']
-                        const prefix = jsonData['prefix']
-                        const firstname = jsonData['firstname']
-                        const lastname = jsonData['lastname']
-                        const phone = jsonData['phone']
-                        const role = jsonData['role']
+                        const id = modalBody.find('.id').val()
+                        const prefix = modalBody.find('.prefix').val()
+                        const firstname = modalBody.find('.firstname').val()
+                        const lastname = modalBody.find('.lastname').val()
+                        const phone = modalBody.find('.phone').val()
+                        const role = modalBody.find('.role').val()
+
+                        const params = {
+                            _token: "{{ csrf_token() }}",
+                            prefix,
+                            firstname,
+                            lastname,
+                            phone,
+                            role
+                        }
 
                         $.ajax({
                             type: "PUT",
                             url: `/setting/user/${id}/update`,
-                            data: {
-                                _token: "{{ csrf_token() }}",
-                                prefix,
-                                firstname,
-                                lastname,
-                                phone,
-                                role
-                            },
+                            data: params,
                             success: function (response) {
+                                console.log(response);
                                 const {status} = response
                                 if (status) {
                                     showAlert('success', 'สำเร็จ')
@@ -222,6 +225,12 @@
                                         }
                                     })
                                 }
+                            },
+                            error: function (error) {
+                                let errors = error.responseJSON.errors
+                                Object.keys(errors).forEach((key) => {
+                                    modalBody.find(`.${key}`).addClass('is-invalid')
+                                });
                             }
                         });
                     }

@@ -60,6 +60,6 @@ class User extends Authenticatable
 
     public function prefixes()
     {
-        return $this->belongsTo(Prefix::class, 'prefix');
+        return $this->belongsTo(Prefix::class, 'prefix')->withTrashed();
     }
 }

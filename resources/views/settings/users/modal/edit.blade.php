@@ -6,10 +6,8 @@
                 <h5 class="modal-title" id="editUserModal-{{$index}}">แก้ไขผู้ใช้งาน</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body text-left createUserForm">
-                {{-- <form id="createUserForm" action="{{ route('setting.user.store') }}" method="post">
-                    @csrf --}}
-                    <input type="hidden" name="user_id" value="{{ $user->id }}">
+            <div class="modal-body text-left">
+                    <input type="hidden" name="id" class="id" value="{{ $user->id }}">
                     <div class="form-group">
                         <label for="email">Email</label>
                         <input type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ $user->email }}" readonly>
@@ -24,7 +22,7 @@
                         <select name="prefix" class="form-control @error('prefix') is-invalid @enderror prefix">
                             <option value="default" selected disabled>กรุณาเลือกคำนำหน้า</option>
                             @foreach ($prefixes as $item)
-                            <option value="{{$item->id}}" {{ old('prefix') == $item->id ? 'selected' : '' }}>{{$item->name_th}}</option>
+                            <option value="{{$item->id}}" {{ $user->prefix == $item->id ? 'selected' : '' }}>{{$item->name_th}}</option>
                             @endforeach
                         </select>
 
@@ -35,7 +33,7 @@
 
                     <div class="form-group">
                         <label for="firstname">ชื่อ</label>
-                        <input type="text" class="form-control @error('firstname') is-invalid @enderror" name="firstname" value="{{ $user->firstname }}">
+                        <input type="text" class="form-control @error('firstname') is-invalid @enderror firstname" name="firstname" value="{{ $user->firstname }}">
 
                         @error('firstname')
                         <span class="invalid-feedback" role="alert">{{ $message }}</span>
@@ -44,7 +42,7 @@
 
                     <div class="form-group">
                         <label for="lastname">นามสกุล</label>
-                        <input type="text" class="form-control @error('lastname') is-invalid @enderror" name="lastname" value="{{ $user->lastname }}">
+                        <input type="text" class="form-control @error('lastname') is-invalid @enderror lastname" name="lastname" value="{{ $user->lastname }}">
 
                         @error('lastname')
                         <span class="invalid-feedback" role="alert">{{ $message }}</span>
@@ -53,7 +51,7 @@
 
                     <div class="form-group">
                         <label for="phone">เบอร์โทรศัพท์</label>
-                        <input type="text" class="form-control @error('phone') is-invalid @enderror" name="phone" value="{{ $user->phone }}">
+                        <input type="text" class="form-control @error('phone') is-invalid @enderror phone" name="phone" value="{{ $user->phone }}">
 
                         @error('phone')
                         <span class="invalid-feedback" role="alert">{{ $message }}</span>
@@ -73,11 +71,10 @@
                         <span class="invalid-feedback" role="alert">{{ $message }}</span>
                         @enderror
                     </div>
-                {{-- </form> --}}
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ปิด</button>
-                <button type="button" class="btn btn-success" id="editBtn" data-item="{{ $user }}">บันทึก</button>
+                <div class="float-end">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ปิด</button>
+                    <button type="button" class="btn btn-success" id="editBtn">บันทึก</button>
+                </div>
             </div>
         </div>
     </div>

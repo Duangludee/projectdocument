@@ -39,6 +39,10 @@ Route::middleware('auth')->group(function (){
             Route::post('/store', [App\Http\Controllers\InformationsController::class, 'store'])->name('setting.information.store');
             Route::put('/{orId}/update', [App\Http\Controllers\InformationsController::class, 'update'])->name('setting.information.update');
             Route::delete('/{orId}/destroy', [App\Http\Controllers\InformationsController::class, 'destroy'])->name('setting.information.destroy');
+
+            Route::post('/prefix/store', [App\Http\Controllers\InformationsController::class, 'storePrefix'])->name('setting.information.storePrefix');
+            Route::put('/prefix/{prefixId}/update', [App\Http\Controllers\InformationsController::class, 'updatePrefix'])->name('setting.information.updatePrefix');
+            Route::delete('/prefix/{prefixId}/destroy', [App\Http\Controllers\InformationsController::class, 'destroyPrefix'])->name('setting.information.destroyPrefix');
         });
 
         Route::prefix('user')->group(function () {

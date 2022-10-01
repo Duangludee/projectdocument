@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Utils\CodeUtil;
 use App\Http\Globals\Constants;
 use App\Http\Utils\Alert;
 use App\Http\Utils\DateUtil;
@@ -64,16 +65,17 @@ class DocumentListController extends Controller
     public function store(Request $request)
     {
         DB::beginTransaction();
-        $request->validate([
-            'no' => 'required',
-            'topic' => 'required',
-            'from' => 'required',
-            'for' => 'required',
-            'users' => 'required',
-            'file' => 'required|image|mimes:jpeg,png,jpg,svg'
-        ]);
+        // $request->validate([
+        //     'no' => 'required',
+        //     'topic' => 'required',
+        //     'from' => 'required',
+        //     'for' => 'required',
+        //     'users' => 'required',
+        //     'file' => 'required|image|mimes:jpeg,png,jpg,svg'
+        // ]);
 
         $documents = new Document;
+        $documents->code = CodeUtil::generateCode('document_code');
         $documents->no = $request->no;
         $documents->topic = $request->topic;
         $documents->date_in = DateUtil::dateToDB($request->date_in);
@@ -143,14 +145,14 @@ class DocumentListController extends Controller
     public function update(Request $request, $docId)
     {
         DB::beginTransaction();
-        $request->validate([
-            'no' => 'required',
-            'topic' => 'required',
-            'from' => 'required',
-            'for' => 'required',
-            'users' => 'required',
-            'file' => 'image|mimes:jpeg,png,jpg,svg'
-        ]);
+        // $request->validate([
+        //     'no' => 'required',
+        //     'topic' => 'required',
+        //     'from' => 'required',
+        //     'for' => 'required',
+        //     'users' => 'required',
+        //     'file' => 'image|mimes:jpeg,png,jpg,svg'
+        // ]);
 
         $document = Document::where('id', $docId)->with('handlers')->first();
         $document->no = $request->no;

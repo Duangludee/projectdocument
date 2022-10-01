@@ -39,7 +39,13 @@
                     @foreach ($documents as $index => $item)
                     <tr>
                         <td class="text-center">{{$index + 1}}</td>
-                        <td class="text-center">{{$item->no}}</td>
+                        <td class="text-center">
+                            @if (isset($item->no))
+                                {{ $item->no }}
+                            @else
+                                {{ $item->code }}
+                            @endif
+                        </td>
                         <td>{{$item->topic}}</td>
                         <td>
                             @foreach ($item->handlers as $index => $handler)

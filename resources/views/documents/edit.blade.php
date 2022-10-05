@@ -40,6 +40,13 @@
                     </div>
                 </div>
 
+                <div class="form-group">
+                    <div class="custom-control custom-switch">
+                        <input type="checkbox" class="custom-control-input" id="draftSW" name="is_draft" {{ $document->is_draft ? 'checked' : '' }}>
+                        <label class="custom-control-label" for="draftSW">ฉบับร่าง</label>
+                    </div>
+                </div>
+
                 <div class="form-group row px-2">
                     <label for="no" class="col-sm-auto col-form-label ps-0">เลขที่</label>
                     <div class="col-sm-6 px-0">

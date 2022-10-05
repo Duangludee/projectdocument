@@ -84,6 +84,7 @@ class DocumentListController extends Controller
         $documents->time_out = $request->time_out;
         $documents->from = $request->from;
         $documents->for = $request->for;
+        $documents->is_draft = $request->has('is_draft');
 
         if ($request->hasFile('file')) {
             $file = $request->file('file');
@@ -163,6 +164,7 @@ class DocumentListController extends Controller
         $document->time_out = $request->time_out;
         $document->from = $request->from;
         $document->for = $request->for;
+        $document->is_draft = $request->has('is_draft');
 
         if ($request->hasFile('file')) {
             $file = $request->file('file');
@@ -179,16 +181,22 @@ class DocumentListController extends Controller
         $document->save();
 
         if (count($request->users) > 0) {
-            if (count($document->handlers) > 0) {
-                Handlers::where('document_id', $document->id)->delete();
+            $olds = Handlers::where('document_id', $document->id)->get();
+            foreach ($olds as $old) {
+                if (!(in_array($old->user_id, $request->users))) {
+                    Handlers::find($old->id)->delete();
+                }
             }
 
-            foreach ($request->users as $key => $id) {
-                $handler = new Handlers;
-                $handler->document_id = $document->id;
-                $handler->user_id = $id;
-                $handler->status = 1;
-                $handler->save();
+            foreach ($request->users as $id) {
+                $old = Handlers::where('user_id', $id)->where('document_id', $document->id)->first();
+                if (!$old) {
+                    $handler = new Handlers;
+                    $handler->document_id = $document->id;
+                    $handler->user_id = $id;
+                    $handler->status = 0;
+                    $handler->save();
+                }
             }
         }
         DB::commit();

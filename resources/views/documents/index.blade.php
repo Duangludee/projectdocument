@@ -46,7 +46,12 @@
                                 {{ $item->code }}
                             @endif
                         </td>
-                        <td>{{$item->topic}}</td>
+                        <td>
+                            {{$item->topic}}
+                            @if ($item->is_draft)
+                                <span class="badge rounded-pill bg-info text-dark">ฉบับร่าง</span>
+                            @endif
+                        </td>
                         <td>
                             @foreach ($item->handlers as $index => $handler)
                             <div class="d-flex align-items-center">
@@ -67,6 +72,7 @@
                             @endforeach
                         </td>
                         <td class="text-center">
+                            {{$item->status}}
                             @if ($item->status == 1)
                             <span class="badge text-bg-warning">{{$item->docStatus->name}}</span>
                             @elseif ($item->status == 2)

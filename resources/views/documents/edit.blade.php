@@ -139,9 +139,13 @@
                         <select class="form-control select-users @error('users') is-invalid @enderror" name="users[]" multiple="multiple">
                             <option value="" disabled>กรุณาเลือกผู้รับผิดชอบ</option>
                             @foreach ($users as $user)
-                                @foreach ($document->handlers as $handler)
-                                <option value="{{$user->id}}" {{$handler->user_id == $user->id ? 'selected' : ''}}>{{$user->getFullName()}}</option>
-                                @endforeach
+                                @if (isset($document->handlers) && count($document->handlers) > 0)
+                                    @foreach ($document->handlers as $handler)
+                                        <option value="{{$user->id}}" {{$handler->user_id == $user->id ? 'selected' : ''}}>{{$user->getFullName()}}</option>
+                                    @endforeach
+                                @else
+                                    <option value="{{$user->id}}">{{$user->getFullName()}}</option>
+                                @endif
                             @endforeach
                         </select>
 

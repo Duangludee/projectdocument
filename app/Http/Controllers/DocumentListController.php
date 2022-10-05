@@ -202,7 +202,7 @@ class DocumentListController extends Controller
         DB::commit();
 
         $status = new Alert('success', 'สำเร็จ', 'แก้ไขเอกสารเรียบร้อยแล้ว');
-        return back()->with('status', $status);
+        return redirect()->route('document.index')->with('status', $status);
     }
 
     /**

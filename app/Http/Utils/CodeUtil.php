@@ -8,7 +8,8 @@ class CodeUtil {
     {
         $code = GenerateCode::where('data_group', $group)->first();
 
-        $olddata_value = substr($code->data_value, 1);
+        $prefixCount = strlen($code->data_prefix);
+        $olddata_value = substr($code->data_value, $prefixCount);
 
         $new_value = (int) $olddata_value + 1;
 

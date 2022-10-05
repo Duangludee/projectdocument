@@ -72,7 +72,6 @@
                             @endforeach
                         </td>
                         <td class="text-center">
-                            {{$item->status}}
                             @if ($item->status == 1)
                             <span class="badge text-bg-warning">{{$item->docStatus->name}}</span>
                             @elseif ($item->status == 2)

@@ -96,7 +96,7 @@ class DocumentListController extends Controller
 
         $documents->save();
 
-        if (count($request->users) > 0) {
+        if (isset($request->users) && count($request->users) > 0) {
             foreach ($request->users as $key => $id) {
                 $handler = new Handlers;
                 $handler->document_id = $documents->id;
@@ -180,7 +180,7 @@ class DocumentListController extends Controller
 
         $document->save();
 
-        if (count($request->users) > 0) {
+        if (isset($request->users) && count($request->users) > 0) {
             $olds = Handlers::where('document_id', $document->id)->get();
             foreach ($olds as $old) {
                 if (!(in_array($old->user_id, $request->users))) {
